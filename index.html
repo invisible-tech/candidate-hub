@@ -30,16 +30,16 @@
   --bordeaux:   #7B1B38;
   --bordeaux-soft: rgba(123,27,56,0.12);
   /* Surfaces */
-  --bg:         #0a0a0a;
-  --bg2:        #111111;
-  --bg3:        #181818;
-  --border:     rgba(255,255,255,0.07);
-  --border-hi:  rgba(255,255,255,0.14);
-  --text:       #f0f0f0;
-  --text2:      #999;
-  --text3:      #555;
-  --card-bg:    #141414;
-  --modal-bg:   #0f0f0f;
+  --bg:         #16181e;
+  --bg2:        #1e2028;
+  --bg3:        #262830;
+  --border:     rgba(255,255,255,0.08);
+  --border-hi:  rgba(255,255,255,0.16);
+  --text:       #e8e8ee;
+  --text2:      #8a8a99;
+  --text3:      #4a4a58;
+  --card-bg:    #1e2028;
+  --modal-bg:   #1a1c24;
   --radius:     14px;
   --radius-sm:  8px;
   font-size: 15px;
@@ -99,7 +99,7 @@ body::before {
 /* ── HEADER ───────────────────────────────────────────────── */
 header {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(10,10,10,0.85);
+  background: rgba(22,24,30,0.9);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
   padding: 0 32px;
@@ -179,7 +179,7 @@ main { position: relative; z-index: 1; padding: 32px; max-width: 1200px; margin:
 
 /* ── STAT CARDS ───────────────────────────────────────────── */
 .stats-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px;
   margin-bottom: 36px;
 }
 .stat-card {
@@ -578,24 +578,60 @@ tbody td { padding: 14px 16px; font-size: 13px; vertical-align: middle; }
   height: 100%; border-radius: 3px; transition: width 1s ease-out;
 }
 
-.lang-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px;
-  margin-top: 12px;
+/* ── SELECTION STATUS TABLE ───────────────────────────────── */
+.sel-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.sel-table thead tr { border-bottom: 2px solid var(--border-hi); }
+.sel-table thead th {
+  padding: 10px 14px; text-align: left;
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.9px; color: var(--text3);
 }
-.lang-card {
-  background: var(--bg3); border: 1px solid var(--border);
-  border-radius: 10px; padding: 12px 14px;
-  transition: border-color 0.2s; cursor: pointer;
+.sel-table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; }
+.sel-table tbody tr:last-child { border-bottom: none; }
+.sel-table tbody tr.totals-row { border-top: 2px solid var(--border-hi); background: var(--bg3); font-weight: 700; }
+.sel-table tbody tr:not(.totals-row):hover { background: var(--bg3); }
+.sel-table td { padding: 11px 14px; vertical-align: middle; }
+.sel-table td.lang-col { font-weight: 600; color: var(--text); }
+.sel-vtid { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 5px; display: inline-block; }
+.sel-vtid.filled    { color: var(--lime);  background: var(--lime-soft); }
+.sel-vtid.pending   { color: #5b8af5;      background: rgba(91,138,245,0.12); }
+.sel-vtid.searching { color: var(--pink);  background: var(--pink-soft); }
+.sel-vtid.na        { color: var(--text3); background: transparent; font-weight: 400; }
+.sel-pct { font-size: 12px; font-weight: 700; }
+.sel-pct.complete { color: var(--lime); }
+.sel-pct.partial  { color: #f59e0b; }
+.sel-legend { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+.sel-legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text2); }
+.sel-legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+/* ── FILTER DROPDOWN + STATUS PILLS ──────────────────────── */
+.filter-select {
+  background: var(--card-bg); border: 1px solid var(--border);
+  color: var(--text); font-family: "Outfit", sans-serif;
+  font-size: 12px; font-weight: 500;
+  padding: 6px 28px 6px 12px; border-radius: 20px;
+  cursor: pointer; outline: none;
+  appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238a8a99'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center;
+  transition: border-color 0.18s;
 }
-.lang-card:hover { border-color: var(--border-hi); }
-.lang-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
-.lang-count { font-size: 11px; color: var(--text2); }
+.filter-select:focus, .filter-select:hover { border-color: var(--border-hi); }
+.filter-select.active { border-color: var(--accent); color: var(--accent); }
+.status-filter-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.status-fpill {
+  background: var(--card-bg); border: 1px solid var(--border);
+  color: var(--text2); font-family: "Outfit", sans-serif;
+  font-size: 11px; font-weight: 500; padding: 5px 12px;
+  border-radius: 20px; cursor: pointer; transition: all 0.15s;
+}
+.status-fpill:hover { border-color: var(--border-hi); color: var(--text); }
+.status-fpill.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
 
 /* ── RESPONSIVE ───────────────────────────────────────────── */
 @media (max-width: 768px) {
   main { padding: 20px 16px; }
   header { padding: 0 16px; }
-  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .hero { flex-direction: column; align-items: flex-start; }
   table { display: none; }
   .mobile-cards { display: flex; flex-direction: column; gap: 12px; }
@@ -671,7 +707,7 @@ tbody tr { animation: row-in 0.3s ease both; }
     </div>
 
     <div class="stats-grid" id="statsGrid">
-      <div class="stat-card" >
+      <div class="stat-card">
         <div class="stat-num" id="statTotal">—</div>
         <div class="stat-label">Total Candidates</div>
       </div>
@@ -685,7 +721,23 @@ tbody tr { animation: row-in 0.3s ease both; }
       </div>
       <div class="stat-card" style="--accent:#E8407A">
         <div class="stat-num" id="statRated">—</div>
-        <div class="stat-label">Rated</div>
+        <div class="stat-label">Reviewed</div>
+      </div>
+      <div class="stat-card" style="--accent:var(--lime)">
+        <div class="stat-num" id="statLicensed">—</div>
+        <div class="stat-label">Licensed Approved</div>
+      </div>
+      <div class="stat-card" style="--accent:var(--pink)">
+        <div class="stat-num" id="statSupporting">—</div>
+        <div class="stat-label">Supporting Approved</div>
+      </div>
+      <div class="stat-card" style="--accent:#5b8af5">
+        <div class="stat-num" id="statLangsDone">—</div>
+        <div class="stat-label">Languages Complete</div>
+      </div>
+      <div class="stat-card" style="--accent:#f87171">
+        <div class="stat-num" id="statRejected">—</div>
+        <div class="stat-label">Rejected</div>
       </div>
     </div>
 
@@ -695,19 +747,47 @@ tbody tr { animation: row-in 0.3s ease both; }
     </div>
 
     <div class="progress-section">
-      <div class="progress-title">Languages in this Cohort</div>
-      <div class="lang-grid" id="langGrid"></div>
+      <div class="progress-title">VT Selection Status</div>
+      <div class="sel-legend">
+        <div class="sel-legend-item"><div class="sel-legend-dot" style="background:var(--lime-soft);border:1px solid var(--lime)"></div>Confirmed</div>
+        <div class="sel-legend-item"><div class="sel-legend-dot" style="background:rgba(91,138,245,0.12);border:1px solid #5b8af5"></div>Pending</div>
+        <div class="sel-legend-item"><div class="sel-legend-dot" style="background:var(--pink-soft);border:1px solid var(--pink)"></div>Searching</div>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="sel-table" id="selTable">
+          <thead>
+            <tr>
+              <th>Language</th>
+              <th>Licensed needed</th>
+              <th>VT ID</th>
+              <th>Supp. needed</th>
+              <th>VT ID</th>
+              <th>% Complete</th>
+            </tr>
+          </thead>
+          <tbody id="selTableBody"></tbody>
+        </table>
+      </div>
     </div>
   </div>
 
   <!-- ROSTER TAB -->
   <div id="tabRoster" style="display:none">
     <div class="filter-bar" id="filterBar">
-      <button class="filter-pill active" onclick="filterLang('all', this)">All</button>
-      <!-- language pills injected here -->
-      <div class="search-wrap">
+      <select class="filter-select" id="langSelect" onchange="filterLangDropdown(this)">
+        <option value="all">All languages</option>
+      </select>
+      <div class="status-filter-pills" id="statusPills">
+        <button class="status-fpill active" data-status="all"    onclick="filterStatus('all',this)">All</button>
+        <button class="status-fpill"        data-status="pending"   onclick="filterStatus('pending',this)">Pending</button>
+        <button class="status-fpill"        data-status="reviewed"  onclick="filterStatus('reviewed',this)">Reviewed</button>
+        <button class="status-fpill"        data-status="Finalist"  onclick="filterStatus('Finalist',this)">Finalist</button>
+        <button class="status-fpill"        data-status="Approved"  onclick="filterStatus('Approved',this)">Approved</button>
+        <button class="status-fpill"        data-status="Rejected"  onclick="filterStatus('Rejected',this)">Rejected</button>
+      </div>
+      <div class="search-wrap" style="margin-left:auto">
         <span class="search-icon">⌕</span>
-        <input type="text" id="searchInput" placeholder="Search name or ID…" oninput="applySearch()"/>
+        <input type="text" id="searchInput" placeholder="Search ID or language…" oninput="applySearch()"/>
       </div>
     </div>
 
@@ -884,7 +964,7 @@ const SCRIPT_URL   = "https://script.google.com/macros/s/AKfycbyFdGIbkYz1AqVDmIp
 // Base URL for audio files in the GitHub repo /audio/ folder.
 // Example: "https://raw.githubusercontent.com/your-org/your-repo/main/audio"
 // Change YOUR_ORG and YOUR_REPO — trailing slash NOT needed.
-const AUDIO_BASE_URL = "https://raw.githubusercontent.com/invisible-tech/candidate-hub_foreground-recordings/main/audio";
+const AUDIO_BASE_URL = "https://cdn.jsdelivr.net/gh/invisible-tech/candidate-hub_foreground-recordings@main/audio";
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
 let talents       = [];
@@ -894,6 +974,7 @@ let currentRating = 0;
 let currentStatus = '';
 let activeLang    = 'all';
 let activeSearch  = '';
+let activeStatus  = 'all';
 let activeRow     = null;
 
 // Auth state — session only (cleared on tab close)
@@ -902,10 +983,6 @@ let sessionAllowed  = sessionStorage.getItem('vth_allowed') === 'true';
 let authChecked     = !!sessionEmail; // already validated this session
 
 // ── BOOT ──────────────────────────────────────────────────────────────────────
-window.addEventListener('load', () => {
-  try { feedback = JSON.parse(localStorage.getItem('vth_feedback') || '{}'); } catch(e) {}
-  loadFromGAS();
-});
 
 // ── GAS LOADER — fetches talents via script doGet?action=init ─────────────────
 function loadFromGAS() {
@@ -958,22 +1035,44 @@ function hideLanding() {
 function render() {
   renderStats();
   renderProgress();
-  renderLangGrid();
+  renderSelTable();
   renderLangPills();
   renderRoster();
 }
 
 function renderStats() {
-  const total    = talents.length;
-  const rated    = talents.filter(t => feedback[t.talent_id]?.rating).length;
-  const finalist = talents.filter(t => feedback[t.talent_id]?.status === 'Finalist').length;
-  const pending  = total - rated;
-  document.getElementById('statTotal').textContent    = total;
-  document.getElementById('statPending').textContent  = pending;
-  document.getElementById('statFinalist').textContent = finalist;
-  document.getElementById('statRated').textContent    = rated;
-  document.getElementById('dashSubtitle').textContent =
-    `${total} candidates · ${rated} reviewed · ${finalist} finalists selected`;
+  const total      = talents.length;
+  const rated      = talents.filter(t => feedback[t.talent_id]?.rating).length;
+  const finalist   = talents.filter(t => feedback[t.talent_id]?.status === 'Finalist').length;
+  const pending    = total - rated;
+  const licensed   = talents.filter(t => {
+    const r = (feedback[t.talent_id]?.role || '').toLowerCase();
+    return feedback[t.talent_id]?.status === 'Approved' && r.includes('licens');
+  }).length;
+  const supporting = talents.filter(t => {
+    const r = (feedback[t.talent_id]?.role || '').toLowerCase();
+    return feedback[t.talent_id]?.status === 'Approved' && r.includes('support');
+  }).length;
+  const rejected   = talents.filter(t => feedback[t.talent_id]?.status === 'Rejected').length;
+  const langs      = [...new Set(talents.map(t => t.language))].filter(Boolean);
+  const langsDone  = langs.filter(lang => {
+    const group = talents.filter(t => t.language === lang);
+    return group.some(t => {
+      const r = (feedback[t.talent_id]?.role || '').toLowerCase();
+      return feedback[t.talent_id]?.status === 'Approved' && r.includes('licens');
+    });
+  }).length;
+
+  document.getElementById('statTotal').textContent      = total;
+  document.getElementById('statPending').textContent    = pending;
+  document.getElementById('statFinalist').textContent   = finalist;
+  document.getElementById('statRated').textContent      = rated;
+  document.getElementById('statLicensed').textContent   = licensed;
+  document.getElementById('statSupporting').textContent = supporting;
+  document.getElementById('statRejected').textContent   = rejected;
+  document.getElementById('statLangsDone').textContent  = `${langsDone}/${langs.length}`;
+  document.getElementById('dashSubtitle').textContent   =
+    `${total} candidates · ${rated} reviewed · ${finalist} finalists · ${licensed} licensed approved`;
 }
 
 function renderProgress() {
@@ -997,51 +1096,93 @@ function renderProgress() {
   document.getElementById('progressBars').innerHTML = html || '<p style="color:var(--text3);font-size:13px">No candidates loaded.</p>';
 }
 
-function renderLangGrid() {
+function renderSelTable() {
   const langs = [...new Set(talents.map(t => t.language))].filter(Boolean).sort();
-  document.getElementById('langGrid').innerHTML = langs.map(lang => {
-    const group    = talents.filter(t => t.language === lang);
-    const licensed  = group.filter(t => {
+  let licensedTotal = 0, licensedFilled = 0, suppTotal = 0, suppFilled = 0;
+
+  const rows = langs.map(lang => {
+    const group = talents.filter(t => t.language === lang);
+    // Find approved licensed VT
+    const licVT = group.find(t => {
       const r = (feedback[t.talent_id]?.role || t.role || '').toLowerCase();
       return feedback[t.talent_id]?.status === 'Approved' && r.includes('licens');
-    }).length;
-    const support   = group.filter(t => {
+    });
+    // Find approved supporting VT
+    const suppVT = group.find(t => {
       const r = (feedback[t.talent_id]?.role || t.role || '').toLowerCase();
       return feedback[t.talent_id]?.status === 'Approved' && r.includes('support');
-    }).length;
-    const rejected  = group.filter(t => feedback[t.talent_id]?.status === 'Rejected').length;
-    const done     = group.filter(t => feedback[t.talent_id]?.rating).length;
-    const rolesStr = [
-      licensed ? `<span class="role-status licensed">● ${licensed} Licensed</span>` : '',
-      support  ? `<span class="role-status supporting">● ${support} Supporting</span>` : '',
-      rejected ? `<span class="role-status rejected">✕ ${rejected} Rejected</span>` : '',
-    ].filter(Boolean).join(' ');
-    return `<div class="lang-card" onclick="switchTab('roster');filterLang('${lang}',null)">
-      <div class="lang-name">${lang}</div>
-      <div class="lang-count">${group.length} candidate${group.length!==1?'s':''} · ${done} reviewed</div>
-      ${rolesStr ? `<div style="margin-top:4px">${rolesStr}</div>` : ''}
-    </div>`;
-  }).join('');
+    });
+    // Find pending/finalist (not yet approved)
+    const pendingLic = !licVT && group.find(t =>
+      ['Finalist','Reviewed'].includes(feedback[t.talent_id]?.status)
+    );
+
+    const licNeeded = 1;
+    // Supporting needed: check if any candidate in group has supporting role at all
+    const suppNeeded = group.some(t => {
+      const r = (t.role || '').toLowerCase();
+      return r.includes('support');
+    }) ? 1 : 0;
+
+    licensedTotal += licNeeded;
+    if (licVT) licensedFilled++;
+    suppTotal += suppNeeded;
+    if (suppVT) suppFilled++;
+
+    const licVtLabel = licVT ? (licVT.vt_id || licVT.uuid) :
+                       pendingLic ? 'Pending' : '—';
+    const licClass   = licVT ? 'filled' : pendingLic ? 'pending' : 'searching';
+
+    const suppVtLabel = suppNeeded === 0 ? null :
+                        suppVT ? (suppVT.vt_id || suppVT.uuid) : 'Searching';
+    const suppClass   = suppVT ? 'filled' : 'searching';
+
+    const pct = licVT ? (suppNeeded === 0 || suppVT ? 100 : 50) : 0;
+    const pctClass = pct === 100 ? 'complete' : 'partial';
+
+    return `<tr>
+      <td class="lang-col">${lang}</td>
+      <td style="color:var(--text2);text-align:center">${licNeeded}</td>
+      <td><span class="sel-vtid ${licClass}">${licVtLabel}</span></td>
+      <td style="color:var(--text2);text-align:center">${suppNeeded}</td>
+      <td>${suppNeeded > 0 ? `<span class="sel-vtid ${suppClass}">${suppVtLabel}</span>` : '<span style="color:var(--text3);font-size:12px">N/A</span>'}</td>
+      <td><span class="sel-pct ${pctClass}">${pct}%</span></td>
+    </tr>`;
+  });
+
+  const licPct  = licensedTotal ? Math.round(licensedFilled / licensedTotal * 100) : 0;
+  const suppPct = suppTotal     ? Math.round(suppFilled     / suppTotal     * 100) : 0;
+
+  rows.push(`<tr class="totals-row">
+    <td>TOTALS</td>
+    <td style="text-align:center">${licensedTotal}</td>
+    <td><span class="sel-pct ${licPct===100?'complete':'partial'}">${licPct}%</span></td>
+    <td style="text-align:center">${suppTotal}</td>
+    <td><span class="sel-pct ${suppPct===100?'complete':'partial'}">${suppPct}%</span></td>
+    <td></td>
+  </tr>`);
+
+  document.getElementById('selTableBody').innerHTML = rows.join('');
 }
 
 function renderLangPills() {
   const langs = [...new Set(talents.map(t => t.language))].filter(Boolean).sort();
-  const bar   = document.getElementById('filterBar');
-  // Remove old lang pills (not the first All pill, not the search wrap)
-  bar.querySelectorAll('.lang-pill').forEach(el => el.remove());
-  const searchWrap = bar.querySelector('.search-wrap');
-  langs.forEach(lang => {
-    const btn = document.createElement('button');
-    btn.className  = 'filter-pill lang-pill';
-    btn.textContent = lang;
-    btn.onclick    = () => filterLang(lang, btn);
-    bar.insertBefore(btn, searchWrap);
-  });
+  const sel = document.getElementById('langSelect');
+  if (!sel) return;
+  sel.innerHTML = '<option value="all">All languages</option>' +
+    langs.map(l => `<option value="${l}">${l}</option>`).join('');
+  sel.value = activeLang === 'all' ? 'all' : activeLang;
 }
 
 function filtered() {
   return talents.filter(t => {
     if (activeLang !== 'all' && t.language !== activeLang) return false;
+    if (activeStatus !== 'all') {
+      const fb = feedback[t.talent_id];
+      if (activeStatus === 'pending')  { if (fb?.rating) return false; }
+      else if (activeStatus === 'reviewed') { if (!fb?.rating) return false; }
+      else { if ((fb?.status || '') !== activeStatus) return false; }
+    }
     if (activeSearch) {
       const q = activeSearch.toLowerCase();
       return (t.uuid||'').toLowerCase().includes(q) ||
@@ -1320,6 +1461,54 @@ function scrub(e) {
   audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
 }
 
+// ── FEEDBACK HYDRATION — restores reviewer's past feedback from the sheet ─────
+async function fetchAndHydrateFeedback(email) {
+  try {
+    const res  = await fetch(`${SCRIPT_URL}?action=feedback&email=${encodeURIComponent(email)}`);
+    const data = await res.json();
+    if (!data.ok || !data.feedback) return;
+
+    // Merge sheet feedback into local state — sheet wins over localStorage
+    // so the most recent saved state is always authoritative
+    data.feedback.forEach(row => {
+      feedback[row.talent_id] = {
+        rating:   row.rating   || 0,
+        status:   row.status   || '',
+        comment:  row.comment  || '',
+        reviewer: row.reviewer || '',
+        email:    email,
+        role:     row.role     || '',
+      };
+      // Also sync role back onto the talent object so table badges update
+      if (row.role) {
+        const t = talents.find(t => t.talent_id === row.talent_id);
+        if (t) t.role = row.role;
+      }
+    });
+
+    // Persist merged state to localStorage as the new baseline
+    localStorage.setItem('vth_feedback', JSON.stringify(feedback));
+  } catch (err) {
+    // GAS unreachable — silently fall back to whatever is in localStorage
+    console.warn('Could not restore feedback from sheet:', err);
+  }
+}
+
+// Also run hydration on load if already signed in from a previous session
+window.addEventListener('load', () => {
+  try { feedback = JSON.parse(localStorage.getItem('vth_feedback') || '{}'); } catch(e) {}
+  loadFromGAS();
+  // If already authenticated from sessionStorage, restore feedback from sheet
+  if (sessionEmail && sessionAllowed) {
+    fetchAndHydrateFeedback(sessionEmail).then(() => {
+      renderRoster();
+      renderStats();
+      renderProgress();
+      renderLangGrid();
+    });
+  }
+});
+
 // ── AUTH ──────────────────────────────────────────────────────────────────────
 function openAuthModal(afterAuth) {
   document._authCallback = afterAuth || null;
@@ -1362,12 +1551,19 @@ async function submitAuth() {
 
     closeAuthModal();
     updateAuthUI();
-    renderRoster(); // refresh role/download visibility
 
     if (sessionAllowed) {
-      showToast('Signed in — you can now submit feedback');
-      if (document._authCallback) document._authCallback();
+      showToast('Signed in — restoring your feedback…');
+      fetchAndHydrateFeedback(email).then(() => {
+        renderRoster();
+        renderStats();
+        renderProgress();
+        renderLangGrid();
+        showToast('Signed in — you can now submit feedback');
+        if (document._authCallback) document._authCallback();
+      });
     } else {
+      renderRoster(); // refresh role/download visibility
       showToast('View only — your email is not on the reviewer list');
     }
 
@@ -1576,6 +1772,19 @@ function skipRole() {
 }
 
 // ── FILTERS ───────────────────────────────────────────────────────────────────
+function filterLangDropdown(sel) {
+  activeLang = sel.value;
+  sel.classList.toggle('active', activeLang !== 'all');
+  renderRoster();
+}
+
+function filterStatus(status, btn) {
+  activeStatus = status;
+  document.querySelectorAll('.status-fpill').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderRoster();
+}
+
 function filterLang(lang, btn) {
   activeLang = lang;
   document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
