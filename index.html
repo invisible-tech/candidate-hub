@@ -765,6 +765,7 @@ tbody tr { animation: row-in 0.3s ease both; }
               <th>Supp. needed</th>
               <th>VT ID</th>
               <th>% Complete</th>
+              <th>Notes</th>
             </tr>
           </thead>
           <tbody id="selTableBody"></tbody>
@@ -983,6 +984,7 @@ let activeLang    = 'all';
 let activeSearch  = '';
 let activeStatus  = 'all';
 let activeRow     = null;
+let selectionData = [];  // rows from SELECTION_STATUS sheet tab
 
 // Auth state — session only (cleared on tab close)
 let sessionEmail    = sessionStorage.getItem('vth_email')   || '';
@@ -993,29 +995,50 @@ let authChecked     = !!sessionEmail; // already validated this session
 
 // ── GAS LOADER — fetches talents via script doGet?action=init ─────────────────
 function loadFromGAS() {
-  fetch(`${SCRIPT_URL}?action=init`)
-    .then(r => { if (!r.ok) throw new Error('Fetch failed'); return r.json(); })
-    .then(data => {
-      if (data.ok && data.talents && data.talents.length) {
-        talents = data.talents.map(t => {
-          const vtId = t.vt_id || t.talent_id || t.id || '';
-          const uuid = t.uuid  || t.vt_uuid   || '';
-          const key  = vtId || uuid;
-          return { ...t, talent_id: key, vt_id: vtId, uuid };
-        });
-      } else {
-        talents = DEMO_TALENTS;
-      }
-      hideLanding();
-      render();
-      updateAuthUI();
-    })
-    .catch(() => {
+  // Load talents and public feedback summary in parallel
+  Promise.all([
+    fetch(`${SCRIPT_URL}?action=init`).then(r => r.json()).catch(() => null),
+    fetch(`${SCRIPT_URL}?action=summary`).then(r => r.json()).catch(() => null),
+    fetch(`${SCRIPT_URL}?action=selection`).then(r => r.json()).catch(() => null),
+  ]).then(([talentData, summaryData, selData]) => {
+    if (talentData && talentData.ok && talentData.talents && talentData.talents.length) {
+      talents = talentData.talents.map(t => {
+        const vtId = t.vt_id || t.talent_id || t.id || '';
+        const uuid = t.uuid  || t.vt_uuid   || '';
+        const key  = vtId || uuid;
+        return { ...t, talent_id: key, vt_id: vtId, uuid };
+      });
+    } else {
       talents = DEMO_TALENTS;
-      hideLanding();
-      render();
-      updateAuthUI();
-    });
+    }
+    // Hydrate selection status tab
+    if (selData && selData.ok && selData.selection) {
+      selectionData = selData.selection;
+    }
+
+    // Hydrate public summary into feedback state (no reviewer info)
+    if (summaryData && summaryData.ok && summaryData.summary) {
+      summaryData.summary.forEach(row => {
+        // Only set if not already overridden by personal session feedback
+        if (!feedback[row.talent_id] || !feedback[row.talent_id].rating) {
+          feedback[row.talent_id] = {
+            rating:   row.rating || 0,
+            status:   row.status || '',
+            role:     row.role   || '',
+            comment:  '',
+            reviewer: '',
+          };
+        }
+        if (row.role) {
+          const t = talents.find(t => t.talent_id === row.talent_id);
+          if (t) t.role = row.role;
+        }
+      });
+    }
+    hideLanding();
+    render();
+    updateAuthUI();
+  });
 }
 
 // ── DEMO DATA (used when SCRIPT_URL not yet configured) ───────────────────────
@@ -1103,57 +1126,119 @@ function renderProgress() {
   document.getElementById('progressBars').innerHTML = html || '<p style="color:var(--text3);font-size:13px">No candidates loaded.</p>';
 }
 
+function statusClass(status) {
+  const s = (status || '').toLowerCase();
+  if (s === 'confirmed') return 'filled';
+  if (s === 'pending')   return 'pending';
+  if (s === 'searching') return 'searching';
+  return 'na';
+}
+
 function renderSelTable() {
+  // If we have data from the sheet tab, use it directly
+  if (selectionData && selectionData.length) {
+    renderSelTableFromSheet();
+  } else {
+    renderSelTableDerived();
+  }
+}
+
+function renderSelTableFromSheet() {
+  let licTotal = 0, licFilled = 0, suppTotal = 0, suppFilled = 0;
+
+  const rows = selectionData.map(row => {
+    const licClass  = statusClass(row.licensed_status);
+    const suppClass = statusClass(row.supp_status);
+    const licVtid   = row.licensed_vtid  || '—';
+    const suppVtid  = row.supp_vtid      || '—';
+    const hasSupp   = row.supp_needed > 0;
+
+    licTotal  += row.licensed_needed;
+    suppTotal += row.supp_needed;
+    if (licClass  === 'filled') licFilled++;
+    if (suppClass === 'filled') suppFilled++;
+
+    // % complete: licensed counts for 1 point, supporting (if needed) for 1 point
+    const points    = row.licensed_needed + row.supp_needed;
+    const filled    = (licClass === 'filled' ? row.licensed_needed : 0) +
+                      (suppClass === 'filled' && hasSupp ? row.supp_needed : 0);
+    const pct       = points ? Math.round(filled / points * 100) : 0;
+    const pctClass  = pct === 100 ? 'complete' : pct > 0 ? 'partial' : '';
+
+    // Notes color — blue if open/pending, normal otherwise
+    const notesColor = /open|pending/i.test(row.notes) ? 'color:#5b8af5' : '';
+
+    return `<tr>
+      <td class="lang-col">${row.language}</td>
+      <td style="color:var(--text2);text-align:center">${row.licensed_needed}</td>
+      <td><span class="sel-vtid ${licClass}">${licVtid}</span></td>
+      <td style="color:var(--text2);text-align:center">${row.supp_needed}</td>
+      <td>${hasSupp
+        ? `<span class="sel-vtid ${suppClass}">${suppVtid}</span>`
+        : `<span style="color:var(--text3);font-size:12px">N/A</span>`}</td>
+      <td>${pct > 0 ? `<span class="sel-pct ${pctClass}">${pct}%</span>` : `<span style="color:var(--text3);font-size:12px">—</span>`}</td>
+      ${document.getElementById('selTable').querySelector('thead tr').children.length > 6
+        ? `<td style="font-size:12px;color:var(--text2);${notesColor}">${row.notes}</td>` : ''}
+    </tr>`;
+  });
+
+  const licPct  = licTotal  ? Math.round(licFilled  / licTotal  * 100) : 0;
+  const suppPct = suppTotal ? Math.round(suppFilled / suppTotal * 100) : 0;
+
+  rows.push(`<tr class="totals-row">
+    <td>TOTALS</td>
+    <td style="text-align:center">${licTotal}</td>
+    <td><span class="sel-pct ${licPct===100?'complete':'partial'}">${licPct}% (${licFilled}/${licTotal})</span></td>
+    <td style="text-align:center">${suppTotal}</td>
+    <td><span class="sel-pct ${suppPct===100?'complete':'partial'}">${suppPct}% (${suppFilled}/${suppTotal})</span></td>
+    <td></td>
+    <td></td>
+  </tr>`);
+
+  document.getElementById('selTableBody').innerHTML = rows.join('');
+}
+
+function renderSelTableDerived() {
+  // Fallback: derive from feedback + talents when sheet tab not available
   const langs = [...new Set(talents.map(t => t.language))].filter(Boolean).sort();
   let licensedTotal = 0, licensedFilled = 0, suppTotal = 0, suppFilled = 0;
 
   const rows = langs.map(lang => {
     const group = talents.filter(t => t.language === lang);
-    // Find approved licensed VT
     const licVT = group.find(t => {
       const r = (feedback[t.talent_id]?.role || t.role || '').toLowerCase();
       return feedback[t.talent_id]?.status === 'Approved' && r.includes('licens');
     });
-    // Find approved supporting VT
     const suppVT = group.find(t => {
       const r = (feedback[t.talent_id]?.role || t.role || '').toLowerCase();
       return feedback[t.talent_id]?.status === 'Approved' && r.includes('support');
     });
-    // Find pending/finalist (not yet approved)
     const pendingLic = !licVT && group.find(t =>
       ['Finalist','Reviewed'].includes(feedback[t.talent_id]?.status)
     );
-
-    const licNeeded = 1;
-    // Supporting needed: check if any candidate in group has supporting role at all
-    const suppNeeded = group.some(t => {
-      const r = (t.role || '').toLowerCase();
-      return r.includes('support');
-    }) ? 1 : 0;
+    const licNeeded  = 1;
+    const suppNeeded = group.some(t => (t.role||'').toLowerCase().includes('support')) ? 1 : 0;
 
     licensedTotal += licNeeded;
     if (licVT) licensedFilled++;
     suppTotal += suppNeeded;
     if (suppVT) suppFilled++;
 
-    const licVtLabel = licVT ? (licVT.vt_id || licVT.uuid) :
-                       pendingLic ? 'Pending' : '—';
+    const licVtLabel = licVT ? (licVT.vt_id || licVT.uuid) : pendingLic ? 'Pending' : '—';
     const licClass   = licVT ? 'filled' : pendingLic ? 'pending' : 'searching';
-
-    const suppVtLabel = suppNeeded === 0 ? null :
-                        suppVT ? (suppVT.vt_id || suppVT.uuid) : 'Searching';
-    const suppClass   = suppVT ? 'filled' : 'searching';
-
-    const pct = licVT ? (suppNeeded === 0 || suppVT ? 100 : 50) : 0;
-    const pctClass = pct === 100 ? 'complete' : 'partial';
+    const suppClass  = suppVT ? 'filled' : 'searching';
+    const pct        = licVT ? (suppNeeded === 0 || suppVT ? 100 : 50) : 0;
 
     return `<tr>
       <td class="lang-col">${lang}</td>
       <td style="color:var(--text2);text-align:center">${licNeeded}</td>
       <td><span class="sel-vtid ${licClass}">${licVtLabel}</span></td>
       <td style="color:var(--text2);text-align:center">${suppNeeded}</td>
-      <td>${suppNeeded > 0 ? `<span class="sel-vtid ${suppClass}">${suppVtLabel}</span>` : '<span style="color:var(--text3);font-size:12px">N/A</span>'}</td>
-      <td><span class="sel-pct ${pctClass}">${pct}%</span></td>
+      <td>${suppNeeded > 0
+        ? `<span class="sel-vtid ${suppClass}">${suppVT ? (suppVT.vt_id||suppVT.uuid) : 'Searching'}</span>`
+        : `<span style="color:var(--text3);font-size:12px">N/A</span>`}</td>
+      <td>${pct > 0 ? `<span class="sel-pct ${pct===100?'complete':'partial'}">${pct}%</span>` : '—'}</td>
+      <td></td>
     </tr>`;
   });
 
@@ -1166,6 +1251,7 @@ function renderSelTable() {
     <td><span class="sel-pct ${licPct===100?'complete':'partial'}">${licPct}%</span></td>
     <td style="text-align:center">${suppTotal}</td>
     <td><span class="sel-pct ${suppPct===100?'complete':'partial'}">${suppPct}%</span></td>
+    <td></td>
     <td></td>
   </tr>`);
 
@@ -1511,7 +1597,7 @@ window.addEventListener('load', () => {
       renderRoster();
       renderStats();
       renderProgress();
-      renderLangGrid();
+      renderSelTable();
     });
   }
 });
