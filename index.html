@@ -663,7 +663,7 @@ tbody tr { animation: row-in 0.3s ease both; }
 @keyframes row-in { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
 </style>
 </head>
-<body>
+<body class="light">
 
 <!-- Loading screen -->
 <div class="loading-screen" id="loadingScreen">
@@ -692,7 +692,7 @@ tbody tr { animation: row-in 0.3s ease both; }
     </div>
     <button onclick="openAuthModal()" id="signInBtn" style="background:var(--accent-soft);border:1px solid var(--accent-glow);color:var(--accent);font-family:'Outfit',sans-serif;font-size:12px;font-weight:600;padding:5px 14px;border-radius:8px;cursor:pointer">Sign in</button>
     <button class="mode-btn" id="modeBtn" onclick="toggleMode()" title="Toggle light/dark mode">
-      <span id="modeIcon">☀</span><span id="modeLabel">Light mode</span>
+      <span id="modeIcon">◑</span><span id="modeLabel">Dark mode</span>
     </button>
   </div>
 </header>
