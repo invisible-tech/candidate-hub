@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Voice Talent Review · PT-BR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🎙</text></svg>"/>
+<style>
+/* ── RESET ───────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── CONFIG: swap these two blocks to change project ──────── */
+/* PROJECT: Voice Talent Review || PT-BR                       */
+/* SCRIPT_URL: set in JS CONFIG block below                    */
+
+/* ── VARIABLES — Jordan's Design System ─────────────────── */
+:root {
+  --header-bg:  #0a5ecc;
+  --lime:       #c8f044;
+  --lime-text:  #2a4a00;
+  --teal:       #00a896;
+  --accent:     #0a5ecc;
+  --amber:      #bf6000;
+  --green:      #2e7d32;
+  --red:        #c62828;
+  --purple:     #6a1b9a;
+
+  --bg:         #f5f4f0;
+  --bg2:        #ffffff;
+  --bg3:        #eeecea;
+  --bg4:        #e4e2de;
+  --text:       #1a1a2e;
+  --text2:      #5a5a6e;
+  --text3:      #9898ae;
+  --border:     rgba(0,0,0,0.08);
+  --border2:    rgba(0,0,0,0.14);
+
+  --r:  8px;
+  --rl: 10px;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+}
+
+html.dark {
+  --bg:         #141420;
+  --bg2:        #1e1e2e;
+  --bg3:        #282838;
+  --bg4:        #323248;
+  --text:       #f0efe9;
+  --text2:      #a0a0be;
+  --text3:      #606080;
+  --border:     rgba(255,255,255,0.07);
+  --border2:    rgba(255,255,255,0.13);
+  --accent:     #4d8ef0;
+  --amber:      #f0a030;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+/* ── HEADER ──────────────────────────────────────────────── */
+header {
+  position: sticky; top: 0; z-index: 100;
+  background: #0a5ecc;
+  height: 52px;
+  display: flex; align-items: center;
+  padding: 0 20px; gap: 16px;
+}
+
+.header-brand {
+  display: flex; align-items: center; gap: 8px;
+  flex-shrink: 0;
+}
+.header-brand-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--lime);
+  flex-shrink: 0;
+}
+.header-brand-name {
+  font-size: 14px; font-weight: 700; color: #fff;
+  letter-spacing: -0.2px;
+}
+.header-brand-sub {
+  font-size: 11px; font-weight: 400;
+  color: rgba(255,255,255,0.6);
+  margin-left: 2px;
+}
+
+.header-nav {
+  display: flex; gap: 2px; margin-left: 24px;
+}
+.header-nav-btn {
+  background: none; border: none; cursor: pointer;
+  font-family: inherit; font-size: 12px; font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  padding: 5px 12px; border-radius: 6px;
+  transition: all 0.15s;
+}
+.header-nav-btn:hover { color: #fff; background: rgba(255,255,255,0.12); }
+.header-nav-btn.active { color: #fff; background: rgba(255,255,255,0.18); }
+
+.header-right {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 10px;
+}
+
+.header-sync {
+  font-size: 11px; font-weight: 500;
+  color: rgba(255,255,255,0.6);
+}
+
+.header-btn {
+  background: transparent; border: 1px solid rgba(255,255,255,0.28);
+  color: #fff; font-family: inherit; font-size: 12px; font-weight: 600;
+  padding: 5px 12px; border-radius: var(--r); cursor: pointer;
+  transition: all 0.15s; display: flex; align-items: center; gap: 6px;
+}
+.header-btn:hover { background: rgba(255,255,255,0.12); }
+
+.header-btn-lime {
+  background: var(--lime); border-color: var(--lime);
+  color: var(--lime-text);
+}
+.header-btn-lime:hover { background: #d4f05a; }
+
+.theme-btn {
+  background: transparent; border: none;
+  width: 30px; height: 30px; border-radius: 50%;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.8); transition: all 0.15s;
+}
+.theme-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+.theme-btn svg { width: 16px; height: 16px; }
+
+/* ── LOADING ──────────────────────────────────────────────── */
+.loading-screen {
+  position: fixed; inset: 0; z-index: 500;
+  background: var(--bg);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 16px; transition: opacity 0.35s;
+}
+.loading-screen.hidden { opacity: 0; pointer-events: none; }
+.loading-brand {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 16px; font-weight: 700; color: var(--text);
+}
+.loading-bar-wrap {
+  width: 180px; height: 2px; background: var(--border2); border-radius: 1px; overflow: hidden;
+}
+.loading-bar {
+  height: 100%; width: 0; background: var(--teal); border-radius: 1px;
+  animation: load-fill 1.8s ease-out forwards;
+}
+@keyframes load-fill { 0%{width:0} 60%{width:75%} 100%{width:100%} }
+.loading-text { font-size: 11px; color: var(--text3); font-weight: 500; }
+
+/* ── MAIN ─────────────────────────────────────────────────── */
+main { padding: 28px 24px; max-width: 1160px; margin: 0 auto; }
+
+/* ── PAGE TITLE ───────────────────────────────────────────── */
+.page-title-row {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 16px; margin-bottom: 28px;
+}
+.page-title { font-size: 22px; font-weight: 700; color: var(--text); line-height: 1.2; }
+.page-title span { color: var(--teal); }
+.page-subtitle { font-size: 12px; font-weight: 500; color: var(--text2); margin-top: 4px; }
+
+/* ── STATS GRID ───────────────────────────────────────────── */
+.stats-row {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+  margin-bottom: 12px;
+}
+.stat-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--rl); padding: 18px 20px;
+  position: relative; overflow: hidden;
+}
+.stat-card::after {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--_c, var(--teal));
+}
+.stat-num {
+  font-size: 28px; font-weight: 700; color: var(--_c, var(--teal));
+  line-height: 1; margin-bottom: 5px;
+}
+.stat-label {
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.07em; color: var(--text2);
+}
+.stat-card-sm .stat-num { font-size: 20px; }
+
+/* ── SECTION CARD ─────────────────────────────────────────── */
+.section-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--rl); padding: 22px;
+  margin-bottom: 20px;
+}
+.section-card-title {
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.07em; color: var(--text2);
+  margin-bottom: 16px;
+}
+
+/* ── PROGRESS BARS ────────────────────────────────────────── */
+.prog-row { margin-bottom: 12px; }
+.prog-row-top {
+  display: flex; justify-content: space-between;
+  font-size: 12px; font-weight: 500; color: var(--text);
+  margin-bottom: 5px;
+}
+.prog-row-top span:last-child { color: var(--text2); font-size: 11px; }
+.prog-track {
+  height: 5px; background: var(--bg3); border-radius: 3px; overflow: hidden;
+}
+.prog-fill { height: 100%; border-radius: 3px; transition: width 0.9s ease-out; }
+
+/* ── FILTER BAR ───────────────────────────────────────────── */
+.filter-bar {
+  display: flex; gap: 8px; align-items: center;
+  flex-wrap: wrap; margin-bottom: 20px;
+}
+.status-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.status-pill {
+  background: var(--bg2); border: 1px solid var(--border2);
+  color: var(--text2); font-family: inherit; font-size: 11px; font-weight: 600;
+  padding: 5px 12px; border-radius: 99px; cursor: pointer; transition: all 0.15s;
+}
+.status-pill:hover { border-color: var(--teal); color: var(--text); }
+.status-pill.active { background: var(--teal); border-color: var(--teal); color: #fff; }
+
+.search-wrap { position: relative; margin-left: auto; }
+.search-wrap input {
+  background: var(--bg2); border: 1px solid var(--border2);
+  color: var(--text); font-family: inherit; font-size: 12px;
+  padding: 6px 12px 6px 32px; border-radius: 99px; width: 200px;
+  outline: none; transition: border-color 0.15s;
+}
+.search-wrap input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(0,168,150,0.12); }
+.search-wrap input::placeholder { color: var(--text3); }
+.search-icon {
+  position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+  color: var(--text3);
+  pointer-events: none;
+}
+.search-icon svg { width: 14px; height: 14px; }
+
+/* ── ROSTER TABLE ─────────────────────────────────────────── */
+.table-wrap {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--rl); overflow: hidden;
+}
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  padding: 10px 16px; text-align: left;
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.07em; color: var(--text2);
+  background: var(--bg3); border-bottom: 1px solid var(--border2);
+  cursor: pointer; user-select: none;
+}
+thead th:hover { background: var(--bg4); }
+tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; cursor: pointer; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: rgba(10,94,204,0.03); }
+tbody td { padding: 12px 16px; font-size: 12px; vertical-align: middle; }
+
+.td-id { font-size: 11px; font-weight: 600; color: var(--accent); }
+.role-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  border-radius: 99px; padding: 3px 10px; font-size: 11px; font-weight: 600;
+}
+.role-badge.licensed  { background: rgba(10,94,204,0.1);  color: var(--accent); }
+.role-badge.supporting{ background: rgba(106,27,154,0.1); color: var(--purple); }
+.role-badge.pending   { background: var(--bg3);            color: var(--text3); font-style: italic; }
+
+.review-status {
+  display: inline-flex; align-items: center; gap: 5px;
+  border-radius: 99px; padding: 3px 10px; font-size: 11px; font-weight: 600;
+}
+.review-status.st-pending    { background: var(--bg3);                    color: var(--text3); }
+.review-status.st-finalist   { background: rgba(10,94,204,0.1);           color: var(--accent); }
+.review-status.st-approved   { background: rgba(46,125,50,0.1);           color: var(--green); }
+.review-status.st-rejected   { background: rgba(198,40,40,0.1);           color: var(--red); }
+
+.stars-row { display: flex; gap: 2px; }
+.star-glyph { font-size: 12px; color: var(--bg4); }
+.star-glyph.on { color: var(--teal); }
+
+.mini-play {
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(0,168,150,0.1); border: 1px solid var(--teal);
+  color: var(--teal); font-size: 9px; cursor: pointer; transition: all 0.15s;
+}
+.mini-play:hover { background: var(--teal); color: #fff; transform: scale(1.08); }
+.mini-play.playing { background: var(--teal); color: #fff; }
+
+.review-btn {
+  background: none; border: 1px solid var(--border2);
+  color: var(--text2); font-family: inherit; font-size: 11px; font-weight: 600;
+  padding: 4px 11px; border-radius: var(--r); cursor: pointer; transition: all 0.15s;
+}
+.review-btn:hover { border-color: var(--teal); color: var(--teal); background: rgba(0,168,150,0.06); }
+.review-btn.done { border-color: rgba(0,168,150,0.4); color: var(--teal); }
+
+/* ── EMPTY STATE ──────────────────────────────────────────── */
+.empty-state { text-align: center; padding: 56px 24px; color: var(--text2); }
+.empty-state svg { width: 40px; height: 40px; opacity: 0.3; margin-bottom: 14px; }
+.empty-state h3 { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+.empty-state p { font-size: 12px; color: var(--text3); }
+
+/* ── MODAL ────────────────────────────────────────────────── */
+.overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.55);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px; opacity: 0; pointer-events: none;
+  transition: opacity 0.2s;
+}
+.overlay.open { opacity: 1; pointer-events: all; }
+
+.modal {
+  background: var(--bg2); border: 1px solid var(--border2);
+  border-radius: 14px; width: 100%; max-width: 540px;
+  max-height: 90vh; overflow-y: auto;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.14);
+  transform: translateY(20px) scale(0.98);
+  transition: transform 0.25s cubic-bezier(0.34,1.4,0.64,1);
+}
+.overlay.open .modal { transform: none; }
+
+.modal-header {
+  padding: 20px 20px 0;
+  display: flex; justify-content: space-between; align-items: flex-start;
+}
+.modal-title { font-size: 17px; font-weight: 700; color: var(--text); }
+.modal-meta  { font-size: 11px; color: var(--text2); margin-top: 3px; }
+.modal-close {
+  background: var(--bg3); border: none; cursor: pointer;
+  width: 30px; height: 30px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: var(--text2); transition: all 0.15s; flex-shrink: 0;
+}
+.modal-close:hover { background: var(--bg4); color: var(--text); }
+
+.modal-body { padding: 18px 20px 24px; }
+
+/* ── PLAYER ───────────────────────────────────────────────── */
+.player-card {
+  background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: var(--rl); padding: 16px; margin-bottom: 20px;
+}
+.player-label {
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.07em; color: var(--text3); margin-bottom: 10px;
+}
+.player-controls { display: flex; align-items: center; gap: 12px; }
+.play-btn {
+  width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+  background: var(--teal); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: #fff; transition: all 0.15s;
+}
+.play-btn:hover { transform: scale(1.08); }
+.play-btn:active { transform: scale(0.95); }
+
+.player-info { flex: 1; min-width: 0; }
+.player-filename {
+  font-size: 11px; font-weight: 600; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 6px;
+}
+.player-progress {
+  position: relative; height: 4px; background: var(--border2);
+  border-radius: 2px; cursor: pointer;
+}
+.player-progress-fill {
+  height: 100%; background: var(--teal); border-radius: 2px;
+  transition: width 0.1s; pointer-events: none;
+}
+.player-time {
+  display: flex; justify-content: space-between;
+  font-size: 10px; color: var(--text3); margin-top: 4px;
+}
+.dl-btn {
+  background: none; border: 1px solid var(--border2);
+  color: var(--text2); font-family: inherit; font-size: 11px; font-weight: 600;
+  padding: 5px 11px; border-radius: var(--r); cursor: pointer; transition: all 0.15s;
+  display: flex; align-items: center; gap: 5px; white-space: nowrap;
+}
+.dl-btn:hover { border-color: var(--teal); color: var(--teal); background: rgba(0,168,150,0.06); }
+
+/* ── REVIEW FORM ──────────────────────────────────────────── */
+.form-label {
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--text2); margin-bottom: 8px; display: block;
+}
+
+.star-rating { display: flex; gap: 5px; margin-bottom: 18px; }
+.star-btn {
+  background: none; border: none; cursor: pointer;
+  font-size: 24px; color: var(--bg4); transition: all 0.12s; line-height: 1;
+}
+.star-btn:hover, .star-btn.active { color: var(--teal); transform: scale(1.15); }
+
+.status-chooser { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+.status-choice {
+  padding: 7px 15px; border-radius: 99px; border: 1px solid var(--border2);
+  background: none; color: var(--text2); font-family: inherit;
+  font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.15s;
+}
+.status-choice:hover { border-color: var(--text2); color: var(--text); }
+.status-choice.finalist.active  { background: rgba(10,94,204,0.1);  border-color: var(--accent); color: var(--accent); }
+.status-choice.approved.active  { background: rgba(46,125,50,0.1);  border-color: var(--green);  color: var(--green); }
+.status-choice.rejected.active  { background: rgba(198,40,40,0.1);  border-color: var(--red);    color: var(--red); }
+
+textarea.form-input, input.form-input {
+  width: 100%; background: var(--bg3); border: 1px solid var(--border2);
+  color: var(--text); font-family: inherit; font-size: 13px;
+  padding: 10px 13px; border-radius: var(--r); outline: none; transition: border-color 0.15s;
+  margin-bottom: 16px;
+}
+textarea.form-input { resize: vertical; min-height: 84px; }
+textarea.form-input:focus, input.form-input:focus {
+  border-color: var(--teal); box-shadow: 0 0 0 3px rgba(0,168,150,0.12);
+}
+textarea.form-input::placeholder, input.form-input::placeholder { color: var(--text3); }
+
+.submit-btn {
+  width: 100%; background: var(--lime); border: none; cursor: pointer;
+  font-family: inherit; font-size: 13px; font-weight: 700;
+  color: var(--lime-text); padding: 12px; border-radius: var(--r);
+  transition: all 0.15s; letter-spacing: 0.2px;
+}
+.submit-btn:hover { background: #d4f05a; transform: translateY(-1px); }
+.submit-btn:active { transform: none; }
+.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.success-msg {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(46,125,50,0.1); border: 1px solid rgba(46,125,50,0.3);
+  border-radius: var(--r); padding: 11px 14px;
+  font-size: 12px; font-weight: 600; color: var(--green);
+  margin-bottom: 16px;
+}
+
+.view-only-notice {
+  background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: var(--r); padding: 11px 14px; margin-bottom: 16px;
+  font-size: 12px; color: var(--text2); display: flex; align-items: center; gap: 10px;
+}
+
+/* ── ROLE STEP ────────────────────────────────────────────── */
+.role-step-banner {
+  display: flex; gap: 12px; align-items: center;
+  background: rgba(0,168,150,0.08); border: 1px solid rgba(0,168,150,0.2);
+  border-radius: var(--rl); padding: 13px 15px; margin-bottom: 20px;
+}
+.role-step-check {
+  width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+  background: var(--teal); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700;
+}
+.role-pick-btn {
+  display: flex; align-items: center; gap: 13px;
+  background: var(--bg2); border: 1px solid var(--border2);
+  border-radius: var(--rl); padding: 13px 15px; cursor: pointer;
+  text-align: left; width: 100%; margin-bottom: 10px; transition: all 0.15s;
+  font-family: inherit; color: var(--text);
+}
+.role-pick-btn:hover { border-color: var(--border); transform: translateY(-1px); }
+.role-pick-btn.sel-licensed   { border-color: var(--accent); background: rgba(10,94,204,0.06); }
+.role-pick-btn.sel-supporting { border-color: var(--purple); background: rgba(106,27,154,0.06); }
+.role-pick-icon {
+  width: 36px; height: 36px; border-radius: var(--r); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 16px;
+}
+.role-pick-name { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+.role-pick-sub  { font-size: 11px; color: var(--text2); }
+
+.skip-btn {
+  width: 100%; background: var(--bg3); border: 1px solid var(--border2);
+  color: var(--text2); font-family: inherit; font-size: 12px; font-weight: 600;
+  padding: 10px; border-radius: var(--r); cursor: pointer; transition: all 0.15s;
+}
+.skip-btn:hover { background: var(--bg4); }
+
+/* ── AUTH MODAL ───────────────────────────────────────────── */
+.auth-modal { max-width: 400px; }
+.auth-error {
+  font-size: 11px; color: var(--red);
+  min-height: 16px; margin-bottom: 12px; display: none;
+}
+
+/* ── VIEW-ONLY BANNER (footer) ───────────────────────────── */
+.viewonly-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 150;
+  background: var(--bg2); border-top: 1px solid var(--border2);
+  padding: 10px 20px; display: none;
+  align-items: center; gap: 12px; justify-content: center;
+}
+.viewonly-bar.show { display: flex; }
+.viewonly-bar span { font-size: 12px; color: var(--text2); }
+.viewonly-bar button {
+  background: var(--lime); border: none; border-radius: var(--r);
+  padding: 6px 14px; font-size: 12px; font-weight: 700;
+  color: var(--lime-text); font-family: inherit; cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ── AUTH HEADER AREA ─────────────────────────────────────── */
+.auth-indicator {
+  display: none; align-items: center; gap: 8px;
+  font-size: 11px; color: rgba(255,255,255,0.75);
+}
+.auth-signout {
+  background: none; border: 1px solid rgba(255,255,255,0.28);
+  color: rgba(255,255,255,0.8); font-family: inherit; font-size: 11px;
+  border-radius: 5px; padding: 3px 8px; cursor: pointer;
+}
+
+/* ── TOAST ────────────────────────────────────────────────── */
+.toast {
+  position: fixed; bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(50px);
+  background: var(--bg2); border: 1px solid var(--teal);
+  border-radius: var(--r); padding: 10px 18px;
+  font-size: 12px; font-weight: 600; color: var(--teal);
+  z-index: 999; transition: transform 0.25s cubic-bezier(0.34,1.4,0.64,1);
+  pointer-events: none; white-space: nowrap;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+@media (max-width: 720px) {
+  main { padding: 20px 14px; }
+  header { padding: 0 14px; }
+  .header-brand-sub { display: none; }
+  .stats-row, .stats-row-sm { grid-template-columns: repeat(2, 1fr); }
+  table { display: none; }
+  .mobile-cards { display: flex; flex-direction: column; gap: 10px; }
+  .mobile-card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: var(--rl); padding: 14px; cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .mobile-card:hover { border-color: var(--border2); }
+}
+@media (min-width: 721px) { .mobile-cards { display: none; } }
+
+/* ── ROW ANIMATION ────────────────────────────────────────── */
+tbody tr { animation: row-in 0.25s ease both; }
+@keyframes row-in { from { opacity:0; transform:translateY(3px); } to { opacity:1; transform:none; } }
+</style>
+</head>
+<body>
+
+<!-- ══ LOADING ══════════════════════════════════════════════ -->
+<div class="loading-screen" id="loadingScreen">
+  <div class="loading-brand">
+    <div style="width:7px;height:7px;border-radius:50%;background:#c8f044;flex-shrink:0"></div>
+    Voice Talent Review · PT-BR
+  </div>
+  <div class="loading-bar-wrap"><div class="loading-bar"></div></div>
+  <div class="loading-text">Loading talent roster…</div>
+</div>
+
+<!-- ══ HEADER ════════════════════════════════════════════════ -->
+<header>
+  <div class="header-brand">
+    <div class="header-brand-dot"></div>
+    <span class="header-brand-name">VT Review</span>
+    <span class="header-brand-sub">PT-BR</span>
+  </div>
+
+  <nav class="header-nav">
+    <button class="header-nav-btn active" id="navDashboard" onclick="switchTab('dashboard')">Dashboard</button>
+    <button class="header-nav-btn"        id="navRoster"    onclick="switchTab('roster')">Roster</button>
+  </nav>
+
+  <div class="header-right">
+    <div class="auth-indicator" id="authIndicator">
+      <span id="authEmailDisplay"></span>
+      <button class="auth-signout" onclick="signOut()">Sign out</button>
+    </div>
+    <button class="header-btn" id="signInBtn" onclick="openAuthModal()">Sign in</button>
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle dark mode">
+      <!-- Sun icon (shown in light mode) -->
+      <svg id="iconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+      </svg>
+      <!-- Moon icon (shown in dark mode) -->
+      <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="display:none">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<!-- ══ MAIN ══════════════════════════════════════════════════ -->
+<main>
+
+  <!-- ── DASHBOARD TAB ───────────────────────────────────── -->
+  <div id="tabDashboard">
+    <div class="page-title-row">
+      <div>
+        <div class="page-title">Voice Talent Review <span>· PT-BR</span></div>
+        <div class="page-subtitle" id="dashSubtitle">Loading…</div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card" style="--_c: var(--teal)">
+        <div class="stat-num" id="statLicensed">—</div>
+        <div class="stat-label">Licensed Approved</div>
+      </div>
+      <div class="stat-card" style="--_c: var(--purple)">
+        <div class="stat-num" id="statSupporting">—</div>
+        <div class="stat-label">Supporting Approved</div>
+      </div>
+      <div class="stat-card" style="--_c: var(--accent)">
+        <div class="stat-num" id="statFinalist2">—</div>
+        <div class="stat-label">Finalists</div>
+      </div>
+      <div class="stat-card" style="--_c: var(--red)">
+        <div class="stat-num" id="statRejected2">—</div>
+        <div class="stat-label">Rejected</div>
+      </div>
+    </div>
+
+
+
+    <div class="section-card">
+      <div class="section-card-title">Review Progress</div>
+      <div id="progressBars"></div>
+    </div>
+
+  <!-- ── ROSTER TAB ───────────────────────────────────────── -->
+  <div id="tabRoster" style="display:none">
+    <div class="filter-bar">
+      <div class="status-pills" id="statusPills">
+        <button class="status-pill active" data-status="all"       onclick="filterStatus('all',this)">All</button>
+        <button class="status-pill"        data-status="pending"   onclick="filterStatus('pending',this)">Pending</button>
+        <button class="status-pill"        data-status="reviewed"  onclick="filterStatus('reviewed',this)">Reviewed</button>
+        <button class="status-pill"        data-status="Finalist"  onclick="filterStatus('Finalist',this)">Finalist</button>
+        <button class="status-pill"        data-status="Approved"  onclick="filterStatus('Approved',this)">Approved</button>
+        <button class="status-pill"        data-status="Rejected"  onclick="filterStatus('Rejected',this)">Rejected</button>
+      </div>
+      <div class="search-wrap">
+        <span class="search-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </span>
+        <input type="text" id="searchInput" placeholder="Search ID or language…" oninput="applySearch()"/>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table id="rosterTable">
+        <thead>
+          <tr>
+            <th>UUID · VT ID</th>
+            <th>Role</th>
+            <th>Audio</th>
+            <th>Rating</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="rosterBody"></tbody>
+      </table>
+      <div id="emptyState" class="empty-state" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <h3>No results found</h3>
+        <p>Try adjusting your filters or search term.</p>
+      </div>
+    </div>
+
+    <div class="mobile-cards" id="mobileCards"></div>
+  </div>
+
+</main>
+
+<!-- ══ REVIEW MODAL ══════════════════════════════════════════ -->
+<div class="overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+  <div class="modal" id="reviewModal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modalTitle">—</div>
+        <div class="modal-meta"  id="modalMeta">—</div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+
+    <!-- Step 1: Review form -->
+    <div class="modal-body" id="modalStep1">
+      <div class="player-card" id="playerCard">
+        <div class="player-label">Recording Sample</div>
+        <div class="player-controls">
+          <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+          <div class="player-info">
+            <div class="player-filename" id="playerFilename">—</div>
+            <div class="player-progress" id="playerProgress" onclick="scrub(event)">
+              <div class="player-progress-fill" id="progressFill" style="width:0%"></div>
+            </div>
+            <div class="player-time">
+              <span id="timeElapsed">0:00</span>
+              <span id="timeDuration">—</span>
+            </div>
+          </div>
+          <a id="dlBtn" class="dl-btn" href="#" download target="_blank" style="display:none">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download
+          </a>
+        </div>
+      </div>
+      <audio id="audioEl" preload="none"></audio>
+
+      <div class="success-msg" id="successMsg" style="display:none">✓ Feedback saved — thank you!</div>
+      <div class="view-only-notice" id="viewOnlyNotice" style="display:none">
+        👁 View-only mode —
+        <button onclick="openAuthModal()" style="background:none;border:none;color:var(--teal);cursor:pointer;font-family:inherit;font-size:12px;font-weight:700;padding:0;text-decoration:underline">sign in</button>
+        with an authorised email to leave feedback.
+      </div>
+
+      <label class="form-label">Your Rating</label>
+      <div class="star-rating" id="starRating">
+        <button class="star-btn" onclick="setRating(1)" data-val="1">★</button>
+        <button class="star-btn" onclick="setRating(2)" data-val="2">★</button>
+        <button class="star-btn" onclick="setRating(3)" data-val="3">★</button>
+        <button class="star-btn" onclick="setRating(4)" data-val="4">★</button>
+        <button class="star-btn" onclick="setRating(5)" data-val="5">★</button>
+      </div>
+
+      <label class="form-label">Mark as</label>
+      <div class="status-chooser">
+        <button class="status-choice finalist" onclick="setStatus('Finalist')">⭐ Finalist</button>
+        <button class="status-choice approved" onclick="setStatus('Approved')">✓ Approved</button>
+        <button class="status-choice rejected" onclick="setStatus('Rejected')">✕ Rejected</button>
+      </div>
+
+      <label class="form-label">Comments</label>
+      <textarea class="form-input" id="feedbackText" placeholder="Notes on tone, pacing, fit for the project…"></textarea>
+
+      <label class="form-label">Your Name</label>
+      <input type="text" class="form-input" id="reviewerName" placeholder="e.g. Rocío — Casting Lead" style="margin-bottom:18px"/>
+
+      <button class="submit-btn" id="submitBtn" onclick="submitReview()">Save Feedback</button>
+    </div>
+
+    <!-- Step 2: Role assignment -->
+    <div class="modal-body" id="modalStep2" style="display:none">
+      <div class="role-step-banner">
+        <div class="role-step-check">✓</div>
+        <div>
+          <div style="font-size:14px;font-weight:700;color:var(--text)">Marked as Approved</div>
+          <div style="font-size:11px;color:var(--text2);margin-top:2px">Assign a role to complete the record</div>
+        </div>
+      </div>
+
+      <label class="form-label">Assign Role</label>
+      <button class="role-pick-btn" id="rolePickLicensed" onclick="assignRole('Licensed')">
+        <div class="role-pick-icon" style="background:rgba(10,94,204,0.1);color:var(--accent)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <div>
+          <div class="role-pick-name">Licensed</div>
+          <div class="role-pick-sub">Primary voice — full licensing rights</div>
+        </div>
+      </button>
+      <button class="role-pick-btn" id="rolePickSupporting" onclick="assignRole('Supporting')">
+        <div class="role-pick-icon" style="background:rgba(106,27,154,0.1);color:var(--purple)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>
+        </div>
+        <div>
+          <div class="role-pick-name">Supporting</div>
+          <div class="role-pick-sub">Secondary voice — supporting role</div>
+        </div>
+      </button>
+
+      <button class="skip-btn" onclick="skipRole()">Assign later</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ AUTH MODAL ════════════════════════════════════════════ -->
+<div class="overlay" id="authOverlay">
+  <div class="modal auth-modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Sign in to review</div>
+        <div class="modal-meta">Enter your email to submit ratings and feedback</div>
+      </div>
+      <button class="modal-close" onclick="closeAuthModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <label class="form-label">Your email</label>
+      <input type="email" class="form-input" id="authEmail" placeholder="you@example.com"
+        onkeydown="if(event.key==='Enter')submitAuth()" style="margin-bottom:4px"/>
+      <div class="auth-error" id="authError"></div>
+      <button class="submit-btn" id="authBtn" onclick="submitAuth()">Continue</button>
+      <button onclick="closeAuthModal()" style="width:100%;background:none;border:none;color:var(--text3);font-family:inherit;font-size:12px;margin-top:10px;cursor:pointer;padding:6px">
+        Browse without signing in
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ VIEW-ONLY BANNER ══════════════════════════════════════ -->
+<div class="viewonly-bar" id="viewonlyBar">
+  <span>👁 View only — </span>
+  <span id="viewonlyMsg">sign in with an authorised email to leave feedback</span>
+  <button onclick="openAuthModal()">Sign in</button>
+</div>
+
+<!-- ══ TOAST ═════════════════════════════════════════════════ -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ════════════════════════════════════════════════════════════
+   CONFIG — edit these lines to repurpose for a new project
+   ════════════════════════════════════════════════════════════ */
+const CONFIG = {
+  appName:        'Voice Talent Review · PT-BR',
+  scriptUrl:      'https://script.google.com/macros/s/AKfycbyFdGIbkYz1AqVDmIp5F6vo4lXGcXkIw2PbTDNePDvbr9_YCI4bAk2RiLcYO43p7bNKeA/exec',
+  audioBaseUrl:   'https://cdn.jsdelivr.net/gh/invisible-tech/candidate-hub_foreground-recordings@main/audio',
+  // Sheet tab names (passed as query params to GAS)
+  tabs: {
+    talents:       'PT_talents',
+    feedback:      'PT_feedback',
+    allowedEmails: 'PT_allowed_emails',
+  },
+  // localStorage key for theme preference
+  themeKey: 'vt-ptbr-theme',
+};
+/* ════════════════════════════════════════════════════════════ */
+
+/* ── STATE ────────────────────────────────────────────────── */
+let talents       = [];
+let feedback      = {};
+let selectionData = [];
+let currentTalent = null;
+let currentRating = 0;
+let currentStatus = '';
+let activeSearch  = '';
+let activeStatus  = 'all';
+let activePlayId  = null;
+
+let sessionEmail   = sessionStorage.getItem('vt-ptbr-email')   || '';
+let sessionAllowed = sessionStorage.getItem('vt-ptbr-allowed') === 'true';
+
+/* ── THEME ────────────────────────────────────────────────── */
+(function initTheme() {
+  const saved = localStorage.getItem(CONFIG.themeKey);
+  if (saved === 'dark') {
+    document.documentElement.classList.add('dark');
+    document.getElementById('iconSun').style.display  = 'none';
+    document.getElementById('iconMoon').style.display = '';
+  }
+})();
+
+function toggleTheme() {
+  const isDark = document.documentElement.classList.toggle('dark');
+  localStorage.setItem(CONFIG.themeKey, isDark ? 'dark' : 'light');
+  document.getElementById('iconSun').style.display  = isDark ? 'none' : '';
+  document.getElementById('iconMoon').style.display = isDark ? ''     : 'none';
+}
+
+/* ── BOOT ─────────────────────────────────────────────────── */
+window.addEventListener('load', () => {
+  try { feedback = JSON.parse(localStorage.getItem('vt-ptbr-feedback') || '{}'); } catch(e) {}
+  loadFromGAS();
+  if (sessionEmail && sessionAllowed) {
+    fetchPersonalFeedback(sessionEmail).then(refresh);
+  }
+});
+
+/* ── GAS LOADER ───────────────────────────────────────────── */
+function gasUrl(action, extra='') {
+  return `${CONFIG.scriptUrl}?action=${action}&tab_talents=${CONFIG.tabs.talents}&tab_feedback=${CONFIG.tabs.feedback}&tab_allowed=${CONFIG.tabs.allowedEmails}${extra}`;
+}
+
+async function loadFromGAS() {
+  try {
+    const [talentData, summaryData] = await Promise.all([
+      fetch(gasUrl('init')).then(r=>r.json()).catch(()=>null),
+      fetch(gasUrl('summary')).then(r=>r.json()).catch(()=>null),
+    ]);
+
+    if (talentData?.ok && talentData.talents?.length) {
+      talents = talentData.talents.map(t => {
+        const vtId = t.vt_id || t.talent_id || t.id || '';
+        const uuid = t.uuid  || t.vt_uuid   || '';
+        const key  = vtId || uuid;
+        return { ...t, talent_id: key, vt_id: vtId, uuid };
+      });
+    } else {
+      talents = DEMO_TALENTS;
+    }
+
+    if (summaryData?.ok && summaryData.summary) {
+      summaryData.summary.forEach(row => {
+        if (!feedback[row.talent_id]?.rating) {
+          feedback[row.talent_id] = { rating: row.rating||0, status: row.status||'', role: row.role||'', comment:'', reviewer:'' };
+        }
+        if (row.role) {
+          const t = talents.find(t=>t.talent_id===row.talent_id);
+          if (t) t.role = row.role;
+        }
+      });
+    }
+  } catch(e) {
+    talents = DEMO_TALENTS;
+  }
+  hideLanding();
+  refresh();
+  updateAuthUI();
+}
+
+/* ── DEMO DATA ────────────────────────────────────────────── */
+const DEMO_TALENTS = [
+  { talent_id:'PT-001', vt_id:'PT-001', uuid:'VT-001', language:'Portuguese (BR)', recording:'', bio:'Warm, natural Brazilian Portuguese narrator.' },
+  { talent_id:'PT-002', vt_id:'PT-002', uuid:'VT-002', language:'Portuguese (BR)', recording:'', bio:'Energetic delivery, great for commercial content.' },
+  { talent_id:'PT-003', vt_id:'PT-003', uuid:'VT-003', language:'Portuguese (BR)', recording:'', bio:'Deep resonant voice, suited for brand storytelling.' },
+  { talent_id:'PT-004', vt_id:'PT-004', uuid:'VT-004', language:'Spanish (LATAM)',  recording:'', bio:'Versatile LATAM Spanish, clean articulation.' },
+  { talent_id:'PT-005', vt_id:'PT-005', uuid:'VT-005', language:'Spanish (LATAM)',  recording:'', bio:'Bright and engaging, excellent for e-learning.' },
+];
+
+/* ── RENDER ───────────────────────────────────────────────── */
+function hideLanding() {
+  const el = document.getElementById('loadingScreen');
+  el.classList.add('hidden');
+  setTimeout(() => el.style.display='none', 400);
+}
+
+function refresh() {
+  renderStats();
+  renderProgress();
+  renderRoster();
+}
+
+function renderStats() {
+  const total      = talents.length;
+  const rated      = talents.filter(t=>feedback[t.talent_id]?.rating).length;
+  const finalist   = talents.filter(t=>feedback[t.talent_id]?.status==='Finalist').length;
+  const rejected   = talents.filter(t=>feedback[t.talent_id]?.status==='Rejected').length;
+  const licensed   = talents.filter(t=>{
+    const r=(feedback[t.talent_id]?.role||'').toLowerCase();
+    return feedback[t.talent_id]?.status==='Approved' && r.includes('licens');
+  }).length;
+  const supporting = talents.filter(t=>{
+    const r=(feedback[t.talent_id]?.role||'').toLowerCase();
+    return feedback[t.talent_id]?.status==='Approved' && r.includes('support');
+  }).length;
+
+  set('statTotal',      total);
+  set('statLicensed',   licensed);
+  set('statSupporting', supporting);
+  set('statFinalist2',  finalist);
+  set('statRejected2',  rejected);
+  set('statRated',      rated);
+  set('dashSubtitle',   `${total} candidates · ${rated} reviewed · ${finalist} finalists · ${licensed} licensed approved`);
+}
+
+function set(id, val) { const el=document.getElementById(id); if(el) el.textContent=val; }
+
+function renderProgress() {
+  const total = talents.length;
+  const rated = talents.filter(t=>feedback[t.talent_id]?.rating).length;
+  const approved = talents.filter(t=>feedback[t.talent_id]?.status==='Approved').length;
+  const finalist = talents.filter(t=>feedback[t.talent_id]?.status==='Finalist').length;
+  const rejected = talents.filter(t=>feedback[t.talent_id]?.status==='Rejected').length;
+  const pending  = total - rated;
+
+  if (!total) {
+    document.getElementById('progressBars').innerHTML = '<p style="color:var(--text3);font-size:12px">No candidates loaded.</p>';
+    return;
+  }
+
+  const pctReviewed = Math.round(rated/total*100);
+  const col = pctReviewed===100 ? 'var(--green)' : pctReviewed>50 ? 'var(--teal)' : 'var(--amber)';
+
+  const rows = [
+    { label: 'Reviewed',  val: rated,    total, color: col },
+    { label: 'Approved',  val: approved, total, color: 'var(--green)' },
+    { label: 'Finalist',  val: finalist, total, color: 'var(--accent)' },
+    { label: 'Rejected',  val: rejected, total, color: 'var(--red)' },
+    { label: 'Pending',   val: pending,  total, color: 'var(--amber)' },
+  ];
+
+  document.getElementById('progressBars').innerHTML = rows.map(r => {
+    const pct = r.total ? Math.round(r.val/r.total*100) : 0;
+    return `<div class="prog-row">
+      <div class="prog-row-top"><span>${r.label}</span><span>${r.val} / ${r.total}</span></div>
+      <div class="prog-track"><div class="prog-fill" style="width:${pct}%;background:${r.color}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+function renderLangSelect() {}
+function renderSelTable() {}
+function statusClass(s) {
+  s=(s||'').toLowerCase();
+  if(s==='confirmed') return 'filled';
+  if(s==='pending')   return 'pending';
+  return 'searching';
+}
+
+function filtered() {
+  return talents.filter(t => {
+    if (activeStatus!=='all') {
+      const fb=feedback[t.talent_id];
+      if (activeStatus==='pending')  { if(fb?.rating) return false; }
+      else if(activeStatus==='reviewed') { if(!fb?.rating) return false; }
+      else { if((fb?.status||'')!==activeStatus) return false; }
+    }
+    if (activeSearch) {
+      const q=activeSearch.toLowerCase();
+      return (t.uuid||'').toLowerCase().includes(q)||
+             (t.vt_id||'').toLowerCase().includes(q)||
+             (t.talent_id||'').toLowerCase().includes(q);
+    }
+    return true;
+  });
+}
+
+function renderRoster() {
+  const list  = filtered();
+  const tbody = document.getElementById('rosterBody');
+  const empty = document.getElementById('emptyState');
+  const mob   = document.getElementById('mobileCards');
+
+  if (!list.length) {
+    tbody.innerHTML=''; mob.innerHTML='';
+    empty.style.display='block'; return;
+  }
+  empty.style.display='none';
+
+  const mkIds = t => {
+    const u=t.uuid||'', v=t.vt_id||'';
+    if(v&&u&&v!==u) return `${u} <span style="color:var(--text3)">·</span> <span style="color:var(--accent);font-weight:700">${v}</span>`;
+    return v||u||'—';
+  };
+  const mkRole = t => {
+    const fb=feedback[t.talent_id]||{};
+    if(fb.status!=='Approved') return '<span style="color:var(--text3);font-size:11px">—</span>';
+    const r=(fb.role||t.role||'').toLowerCase();
+    if(r.includes('licens'))  return `<span class="role-badge licensed">● Licensed</span>`;
+    if(r.includes('support')) return `<span class="role-badge supporting">● Supporting</span>`;
+    return `<span class="role-badge pending">Pending role</span>`;
+  };
+  const mkStars = r => r
+    ? [1,2,3,4,5].map(i=>`<span class="star-glyph${i<=r?' on':''}">★</span>`).join('')
+    : '<span style="color:var(--text3);font-size:11px">—</span>';
+  const mkStatus = s => {
+    if(!s) return '<span class="review-status st-pending">Pending</span>';
+    const icon=s==='Finalist'?'⭐':s==='Approved'?'✓':'✕';
+    return `<span class="review-status st-${s.toLowerCase()}">${icon} ${s}</span>`;
+  };
+  const audioUrl = t => getAudioUrl(t);
+
+  tbody.innerHTML = list.map((t,i) => {
+    const fb=feedback[t.talent_id]||{};
+    const au=audioUrl(t);
+    return `<tr onclick="openModal('${t.talent_id}')" style="animation-delay:${Math.min(i,20)*25}ms">
+      <td class="td-id">${mkIds(t)}</td>
+      <td>${mkRole(t)}</td>
+      <td>${au
+        ?`<button class="mini-play" id="mp-${t.talent_id}" onclick="event.stopPropagation();miniPlay('${t.talent_id}','${au}')">▶</button>`
+        :`<span style="color:var(--text3);font-size:11px">—</span>`}</td>
+      <td><div class="stars-row">${mkStars(fb.rating)}</div></td>
+      <td>${mkStatus(fb.status)}</td>
+      <td><button class="review-btn${fb.rating?' done':''}" onclick="event.stopPropagation();openModal('${t.talent_id}')">${fb.rating?'Edit':'Review'}</button></td>
+    </tr>`;
+  }).join('');
+
+  mob.innerHTML = list.map(t => {
+    const fb=feedback[t.talent_id]||{};
+    return `<div class="mobile-card" onclick="openModal('${t.talent_id}')">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+        <div>
+          <div style="font-size:11px;font-weight:600;color:var(--accent)">${t.uuid||t.vt_id||t.talent_id}</div>
+        </div>
+        ${mkStatus(fb.status)}
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div class="stars-row">${mkStars(fb.rating)}</div>
+        <button class="review-btn${fb.rating?' done':''}" style="font-size:11px">Review →</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ── AUDIO ────────────────────────────────────────────────── */
+function getAudioUrl(t) {
+  if (t.recording && t.recording.startsWith('http')) return t.recording;
+  const file = t.recording || t.drive_file_id || '';
+  if (!file) return '';
+  const filename = file.split('/').pop();
+  return `${CONFIG.audioBaseUrl}/${filename}`;
+}
+
+function fmtTime(s) {
+  if(isNaN(s)) return '0:00';
+  const m=Math.floor(s/60), sec=Math.floor(s%60);
+  return `${m}:${sec.toString().padStart(2,'0')}`;
+}
+
+function miniPlay(id, url) {
+  const audio = document.getElementById('audioEl');
+  const btn   = document.getElementById(`mp-${id}`);
+  if (activePlayId===id) {
+    if(audio.paused){audio.play();btn.classList.add('playing');btn.innerHTML='⏸';}
+    else{audio.pause();btn.classList.remove('playing');btn.innerHTML='▶';}
+    return;
+  }
+  if(activePlayId){const p=document.getElementById(`mp-${activePlayId}`);if(p){p.classList.remove('playing');p.innerHTML='▶';}audio.pause();}
+  activePlayId=id;
+  audio.src=url;
+  audio.play().then(()=>{btn.classList.add('playing');btn.innerHTML='⏸';}).catch(()=>showToast('Audio unavailable'));
+  audio.onended=()=>{btn.classList.remove('playing');btn.innerHTML='▶';activePlayId=null;};
+}
+
+/* ── MODAL ────────────────────────────────────────────────── */
+function openModal(id) {
+  currentTalent = talents.find(t=>t.talent_id===id);
+  if (!currentTalent) return;
+
+  const fb = feedback[id]||{};
+  currentRating = fb.rating||0;
+  currentStatus = fb.status||'';
+
+  const uuid=currentTalent.uuid||'', vtid=currentTalent.vt_id||'';
+  const title=(uuid&&vtid&&uuid!==vtid)?`${uuid} · ${vtid}`:(vtid||uuid||'—');
+  const roleLbl=((r)=>r.includes('licens')?'Licensed':r.includes('support')?'Supporting':r.includes('reject')?'Rejected':'Pending')((currentTalent.role||'').toLowerCase());
+
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalMeta').textContent  = `${currentTalent.language} · ${roleLbl}${currentTalent.bio?'  —  '+currentTalent.bio:''}`;
+
+  const audio   = document.getElementById('audioEl');
+  const audioUrl= getAudioUrl(currentTalent);
+  audio.src = audioUrl||'';
+  document.getElementById('playerFilename').textContent = audioUrl?`${title} — Recording Sample`:'No audio file linked';
+  document.getElementById('progressFill').style.width='0%';
+  document.getElementById('timeElapsed').textContent='0:00';
+  document.getElementById('timeDuration').textContent='—';
+  document.getElementById('playBtn').innerHTML='▶';
+  document.getElementById('playBtn').classList.remove('playing');
+  document.getElementById('playerCard').style.opacity=audioUrl?'1':'0.4';
+
+  const dl=document.getElementById('dlBtn');
+  dl.href=audioUrl||'#';
+  dl.style.display=(audioUrl&&sessionAllowed)?'flex':'none';
+
+  renderStars(currentRating);
+  renderStatusBtns(currentStatus);
+  document.getElementById('feedbackText').value=fb.comment||'';
+  document.getElementById('reviewerName').value=fb.reviewer||sessionEmail||'';
+  document.getElementById('successMsg').style.display='none';
+  document.getElementById('submitBtn').disabled=false;
+  document.getElementById('submitBtn').textContent='Save Feedback';
+
+  const isEditor=sessionAllowed;
+  const reviewEls=document.querySelectorAll('#starRating,.status-chooser,#feedbackText,#reviewerName,#submitBtn,.form-label');
+  reviewEls.forEach(el=>{ el.style.display=isEditor?'':'none'; });
+  document.getElementById('viewOnlyNotice').style.display=isEditor?'none':'flex';
+
+  document.getElementById('modalStep1').style.display='';
+  document.getElementById('modalStep2').style.display='none';
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow='';
+  const a=document.getElementById('audioEl'); a.pause(); a.src='';
+  document.getElementById('playBtn').innerHTML='▶';
+  document.getElementById('playBtn').classList.remove('playing');
+}
+function closeModalOnOverlay(e) { if(e.target===document.getElementById('modalOverlay')) closeModal(); }
+
+function togglePlay() {
+  const audio=document.getElementById('audioEl'), btn=document.getElementById('playBtn');
+  if(!audio.src||audio.src===window.location.href){showToast('No audio file linked');return;}
+  if(audio.paused){audio.play().then(()=>{btn.innerHTML='⏸';btn.classList.add('playing');}).catch(()=>showToast('Could not play audio'));}
+  else{audio.pause();btn.innerHTML='▶';btn.classList.remove('playing');}
+}
+
+const audioEl=document.getElementById('audioEl');
+audioEl.addEventListener('timeupdate',()=>{
+  if(!audioEl.duration) return;
+  const pct=audioEl.currentTime/audioEl.duration*100;
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('timeElapsed').textContent=fmtTime(audioEl.currentTime);
+  document.getElementById('timeDuration').textContent=fmtTime(audioEl.duration);
+});
+audioEl.addEventListener('ended',()=>{document.getElementById('playBtn').innerHTML='▶';document.getElementById('playBtn').classList.remove('playing');});
+audioEl.addEventListener('loadedmetadata',()=>{document.getElementById('timeDuration').textContent=fmtTime(audioEl.duration);});
+function scrub(e){const a=document.getElementById('audioEl');if(!a.duration)return;const r=document.getElementById('playerProgress').getBoundingClientRect();a.currentTime=((e.clientX-r.left)/r.width)*a.duration;}
+
+/* ── FEEDBACK ─────────────────────────────────────────────── */
+async function fetchPersonalFeedback(email) {
+  try {
+    const res  = await fetch(gasUrl('feedback',`&email=${encodeURIComponent(email)}`));
+    const data = await res.json();
+    if (!data.ok||!data.feedback) return;
+    data.feedback.forEach(row=>{
+      feedback[row.talent_id]={rating:row.rating||0,status:row.status||'',comment:row.comment||'',reviewer:row.reviewer||'',email,role:row.role||''};
+      if(row.role){const t=talents.find(t=>t.talent_id===row.talent_id);if(t)t.role=row.role;}
+    });
+    localStorage.setItem('vt-ptbr-feedback', JSON.stringify(feedback));
+  } catch(e) { console.warn('Could not restore feedback:', e); }
+}
+
+/* ── REVIEW FORM ──────────────────────────────────────────── */
+function setRating(val) { currentRating=val; renderStars(val); }
+function renderStars(val) {
+  document.querySelectorAll('.star-btn').forEach(b=>b.classList.toggle('active', parseInt(b.dataset.val)<=val));
+}
+function setStatus(val) { currentStatus=currentStatus===val?'':val; renderStatusBtns(currentStatus); }
+function renderStatusBtns(val) {
+  document.querySelectorAll('.status-choice').forEach(b=>b.classList.toggle('active', b.textContent.includes(val)&&val!==''));
+}
+
+function submitReview() {
+  if (!sessionEmail)   { openAuthModal(()=>submitReview()); return; }
+  if (!sessionAllowed) { showToast('Your email is not authorised to submit feedback'); return; }
+  if (!currentRating)  { showToast('Please give a star rating first'); return; }
+  const reviewer=document.getElementById('reviewerName').value.trim();
+  if (!reviewer) { showToast('Please enter your name'); return; }
+
+  const comment=document.getElementById('feedbackText').value.trim();
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=true; btn.textContent='Saving…';
+
+  feedback[currentTalent.talent_id]={
+    rating:currentRating, status:currentStatus, comment, reviewer, email:sessionEmail,
+    role:feedback[currentTalent.talent_id]?.role||'',
+  };
+  localStorage.setItem('vt-ptbr-feedback', JSON.stringify(feedback));
+
+  const payload={
+    timestamp:     new Date().toISOString(),
+    talent_id:     currentTalent.talent_id,
+    uuid:          currentTalent.uuid||'',
+    vt_id:         currentTalent.vt_id||'',
+    language:      currentTalent.language,
+    role:          feedback[currentTalent.talent_id]?.role||'',
+    reviewer_name: reviewer,
+    reviewer_email:sessionEmail,
+    rating:        currentRating,
+    status:        currentStatus,
+    comment,
+    tab_feedback:  CONFIG.tabs.feedback,
+  };
+
+  fetch(CONFIG.scriptUrl,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+    .then(()=>onSaveSuccess(btn)).catch(()=>onSaveSuccess(btn));
+}
+
+function onSaveSuccess(btn) {
+  refresh();
+  if (currentStatus==='Approved') {
+    btn.disabled=false; btn.textContent='Save Feedback';
+    const s1=document.getElementById('modalStep1');
+    const s2=document.getElementById('modalStep2');
+    s1.style.transition='opacity 0.18s'; s1.style.opacity='0';
+    setTimeout(()=>{
+      s1.style.display='none'; s1.style.opacity=''; s1.style.transition='';
+      document.getElementById('rolePickLicensed').classList.remove('sel-licensed','sel-supporting');
+      document.getElementById('rolePickSupporting').classList.remove('sel-licensed','sel-supporting');
+      s2.style.display='block';
+    },200);
+  } else {
+    document.getElementById('successMsg').style.display='flex';
+    btn.textContent='✓ Saved';
+    setTimeout(()=>{btn.disabled=false;btn.textContent='Save Feedback';closeModal();},1400);
+  }
+}
+
+function assignRole(role) {
+  document.getElementById('rolePickLicensed').className='role-pick-btn'+(role==='Licensed'?' sel-licensed':'');
+  document.getElementById('rolePickSupporting').className='role-pick-btn'+(role==='Supporting'?' sel-supporting':'');
+
+  if(feedback[currentTalent.talent_id]) feedback[currentTalent.talent_id].role=role;
+  localStorage.setItem('vt-ptbr-feedback', JSON.stringify(feedback));
+  const t=talents.find(t=>t.talent_id===currentTalent.talent_id); if(t) t.role=role;
+
+  const payload={
+    timestamp:      new Date().toISOString(),
+    talent_id:      currentTalent.talent_id,
+    uuid:           currentTalent.uuid||'',
+    vt_id:          currentTalent.vt_id||'',
+    language:       currentTalent.language,
+    role,
+    reviewer_name:  feedback[currentTalent.talent_id]?.reviewer||'',
+    reviewer_email: sessionEmail,
+    rating:         feedback[currentTalent.talent_id]?.rating||'',
+    status:         'Approved',
+    comment:        feedback[currentTalent.talent_id]?.comment||'',
+    role_assigned:  true,
+    tab_feedback:   CONFIG.tabs.feedback,
+  };
+  fetch(CONFIG.scriptUrl,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+
+  refresh();
+  setTimeout(closeModal, 800);
+}
+function skipRole() { closeModal(); }
+
+/* ── AUTH ─────────────────────────────────────────────────── */
+function openAuthModal(cb) {
+  document._authCb=cb||null;
+  document.getElementById('authOverlay').classList.add('open');
+  document.getElementById('authError').style.display='none';
+  document.getElementById('authEmail').value=sessionEmail||'';
+  document.body.style.overflow='hidden';
+  setTimeout(()=>document.getElementById('authEmail').focus(),300);
+}
+function closeAuthModal() {
+  document.getElementById('authOverlay').classList.remove('open');
+  document.body.style.overflow='';
+  document._authCb=null;
+}
+
+async function submitAuth() {
+  const email=document.getElementById('authEmail').value.trim().toLowerCase();
+  const errEl=document.getElementById('authError');
+  const btn=document.getElementById('authBtn');
+  if(!email||!email.includes('@')){errEl.textContent='Please enter a valid email address.';errEl.style.display='block';return;}
+  btn.disabled=true; btn.textContent='Checking…'; errEl.style.display='none';
+  try {
+    const res=await fetch(gasUrl('auth',`&email=${encodeURIComponent(email)}`));
+    const data=await res.json();
+    sessionEmail=email; sessionAllowed=!!(data.ok&&data.allowed);
+    sessionStorage.setItem('vt-ptbr-email',   sessionEmail);
+    sessionStorage.setItem('vt-ptbr-allowed', sessionAllowed);
+    closeAuthModal(); updateAuthUI();
+    if(sessionAllowed){
+      showToast('Signed in — restoring your feedback…');
+      fetchPersonalFeedback(email).then(()=>{refresh();showToast('Signed in — you can now submit feedback');if(document._authCb)document._authCb();});
+    } else {
+      refresh();
+      showToast('View only — your email is not on the reviewer list');
+    }
+  } catch(e) {
+    sessionEmail=email; sessionAllowed=false;
+    sessionStorage.setItem('vt-ptbr-email', sessionEmail);
+    closeAuthModal(); updateAuthUI();
+    showToast('Could not verify email — view only mode');
+  }
+  btn.disabled=false; btn.textContent='Continue';
+}
+
+function signOut() {
+  sessionEmail=''; sessionAllowed=false;
+  sessionStorage.removeItem('vt-ptbr-email');
+  sessionStorage.removeItem('vt-ptbr-allowed');
+  updateAuthUI(); refresh();
+  showToast('Signed out');
+}
+
+function updateAuthUI() {
+  const signInBtn=document.getElementById('signInBtn');
+  const indicator=document.getElementById('authIndicator');
+  const bar=document.getElementById('viewonlyBar');
+  const msg=document.getElementById('viewonlyMsg');
+  if(sessionEmail){
+    signInBtn.style.display='none';
+    indicator.style.display='flex';
+    document.getElementById('authEmailDisplay').textContent=sessionEmail;
+    if(!sessionAllowed){bar.classList.add('show');msg.textContent=`${sessionEmail} is not on the reviewer list`;}
+    else{bar.classList.remove('show');}
+  } else {
+    signInBtn.style.display='';
+    indicator.style.display='none';
+    bar.classList.remove('show');
+  }
+}
+
+/* ── FILTERS ──────────────────────────────────────────────── */
+function filterStatus(s,btn) {
+  activeStatus=s;
+  document.querySelectorAll('.status-pill').forEach(p=>p.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  renderRoster();
+}
+function applySearch() {activeSearch=document.getElementById('searchInput').value.trim();renderRoster();}
+
+/* ── TABS ─────────────────────────────────────────────────── */
+function switchTab(tab) {
+  document.getElementById('tabDashboard').style.display=tab==='dashboard'?'':'none';
+  document.getElementById('tabRoster').style.display   =tab==='roster'?'':'none';
+  document.getElementById('navDashboard').classList.toggle('active',tab==='dashboard');
+  document.getElementById('navRoster').classList.toggle('active',tab==='roster');
+}
+
+/* ── KEYBOARD ─────────────────────────────────────────────── */
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closeModal();closeAuthModal();}
+});
+
+/* ── TOAST ────────────────────────────────────────────────── */
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+</script>
+</body>
+</html>
