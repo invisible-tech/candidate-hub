@@ -883,9 +883,10 @@ function gasUrl(action, extra='') {
 
 async function loadFromGAS() {
   try {
+    const opts = { redirect: 'follow' };
     const [talentData, summaryData] = await Promise.all([
-      fetch(gasUrl('init')).then(r=>r.json()).catch(()=>null),
-      fetch(gasUrl('summary')).then(r=>r.json()).catch(()=>null),
+      fetch(gasUrl('init'), opts).then(r=>r.json()).catch(e=>{console.error('init fetch failed:',e);return null;}),
+      fetch(gasUrl('summary'), opts).then(r=>r.json()).catch(e=>{console.error('summary fetch failed:',e);return null;}),
     ]);
 
     if (talentData?.ok && talentData.talents?.length) {
@@ -1312,7 +1313,7 @@ function closeModalOnOverlay(e) { if(e.target===document.getElementById('modalOv
 /* ── FEEDBACK ─────────────────────────────────────────────── */
 async function fetchPersonalFeedback(email) {
   try {
-    const res  = await fetch(gasUrl('feedback',`&email=${encodeURIComponent(email)}`));
+    const res  = await fetch(gasUrl('feedback',`&email=${encodeURIComponent(email)}`), { redirect: 'follow' });
     const data = await res.json();
     if (!data.ok||!data.feedback) return;
     data.feedback.forEach(row=>{
@@ -1441,7 +1442,7 @@ async function submitAuth() {
   if(!email||!email.includes('@')){errEl.textContent='Please enter a valid email address.';errEl.style.display='block';return;}
   btn.disabled=true; btn.textContent='Checking…'; errEl.style.display='none';
   try {
-    const res=await fetch(gasUrl('auth',`&email=${encodeURIComponent(email)}`));
+    const res=await fetch(gasUrl('auth',`&email=${encodeURIComponent(email)}`), { redirect: 'follow' });
     const data=await res.json();
     sessionEmail=email; sessionAllowed=!!(data.ok&&data.allowed);
     sessionStorage.setItem('vt-ptbr-email',   sessionEmail);
